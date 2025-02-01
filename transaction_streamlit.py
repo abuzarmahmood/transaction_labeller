@@ -53,6 +53,11 @@ def main():
         # Get predictions for all transactions
         predictions = predict_categories(model, vectorizer, df['Name'].values, n=5)
         
+        # Initialize categories with top predictions
+        for idx, pred_categories in enumerate(predictions):
+            if not df.at[idx, 'Category'] and pred_categories:
+                df.at[idx, 'Category'] = pred_categories[0]
+        
         # Create a container for the transactions
         transactions_container = st.container()
         
