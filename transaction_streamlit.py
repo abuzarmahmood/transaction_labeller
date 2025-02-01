@@ -34,6 +34,24 @@ def main():
         transactions_container = st.container()
         
         with transactions_container:
+            # Add column headers
+            header_col1, header_col2, header_col3, header_col4, header_col5, header_col6 = st.columns([1, 1, 1, 2, 2, 2])
+            with header_col1:
+                if 'Date' in df.columns:
+                    st.markdown("**Date**")
+            with header_col2:
+                if 'Amount' in df.columns:
+                    st.markdown("**Amount**")
+            with header_col3:
+                if 'Account' in df.columns:
+                    st.markdown("**Account**")
+            with header_col4:
+                st.markdown("**Transaction**")
+            with header_col5:
+                st.markdown("**Suggestions**")
+            with header_col6:
+                st.markdown("**Category**")
+
             # Display each transaction with its predictions
             for idx, (transaction, pred_categories) in enumerate(zip(df['Name'], predictions)):
                 col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 1, 2, 2, 2])
