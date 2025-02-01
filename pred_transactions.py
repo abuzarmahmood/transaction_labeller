@@ -63,19 +63,20 @@ def load_model_and_vectorizer():
     """Return the trained model and vectorizer"""
     return global_model, global_vectorizer
 
-def predict_categories(transaction_text, n=3):
+def predict_categories(model, vectorizer, transactions, n=5):
     """
-    Predict top n categories for a transaction description
+    Predict top n categories for multiple transactions
     
     Args:
-        transaction_text (str): Transaction description text
+        model: Trained model
+        vectorizer: Fitted vectorizer
+        transactions (list): List of transaction description texts
         n (int): Number of top categories to return
         
     Returns:
-        list: Top n predicted categories
+        list of lists: Top n predicted categories for each transaction
     """
-    model, vectorizer = load_model_and_vectorizer()
-    X_new = vectorizer.transform([transaction_text])
-    proba = model.predict_proba(X_new)
-    top_n_idx = np.argsort(proba[0])[-n:][::-1]
-    return [model.classes_[i] for i in top_n_idx]
+    X = vectorizer.transform(transactions)
+    proba = model.predict_proba(X)
+    top_n_indices = np.argsort(proba, axis=1)[:, -n:]
+    return [[model.classes_[idx] for idx in indices[::-1]] for indices in top_n_indices]
