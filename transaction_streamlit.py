@@ -166,7 +166,7 @@ def main():
                         st.session_state.flags[idx] = False
                     
                     is_flagged = st.checkbox(
-                        "Flag",
+                        "",
                         value=st.session_state.flags[idx],
                         key=f"flag_{idx}"
                     )
