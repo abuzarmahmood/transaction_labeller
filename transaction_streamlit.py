@@ -108,7 +108,7 @@ def main():
                         with button_col:
                             if st.button(category, key=f"pred_{idx}_{category}"):
                                 df.at[idx, 'Category'] = category
-                                st.experimental_rerun()
+                                # st.rerun()
                 
                 with col6:
                     # Dropdown for manual category selection
