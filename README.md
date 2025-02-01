@@ -2,6 +2,9 @@
 
 A machine learning-powered tool for automatically categorizing financial transactions with multiple user interfaces.
 
+![image](https://github.com/user-attachments/assets/0a8fd5cb-27d4-479d-b6a5-431ee9020fb5)
+
+
 ## Overview
 
 This project provides a system for categorizing financial transactions using machine learning (Naive Bayes) with both a desktop GUI (Tkinter) and web interface (Streamlit). The system:
