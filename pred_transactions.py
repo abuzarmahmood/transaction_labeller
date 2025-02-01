@@ -28,7 +28,7 @@ def return_model_and_vectorizer():
 
 def predict_categories(model, vectorizer, transactions, n=5):
     """
-    Predict top n categories for multiple transactions
+    Predict top n categories and their probabilities for multiple transactions
     
     Args:
         model: Trained model
@@ -37,12 +37,25 @@ def predict_categories(model, vectorizer, transactions, n=5):
         n (int): Number of top categories to return
         
     Returns:
-        list of lists: Top n predicted categories for each transaction
+        tuple: (categories, probabilities) where each is a list of lists
     """
     X = vectorizer.transform(transactions)
     proba = model.predict_proba(X)
     top_n_indices = np.argsort(proba, axis=1)[:, -n:]
-    return [[model.classes_[idx] for idx in indices[::-1]] for indices in top_n_indices]
+    
+    categories = []
+    probabilities = []
+    
+    for idx, indices in enumerate(top_n_indices):
+        row_categories = []
+        row_probabilities = []
+        for cat_idx in indices[::-1]:
+            row_categories.append(model.classes_[cat_idx])
+            row_probabilities.append(proba[idx, cat_idx])
+        categories.append(row_categories)
+        probabilities.append(row_probabilities)
+    
+    return categories, probabilities
 
 def top_n_accuracy(model, X, y, n=5):
     top_n = np.argsort(model.predict_proba(X), axis=1)[:, -n:]

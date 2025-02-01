@@ -52,11 +52,11 @@ def main():
         if 'Flag' not in df.columns:
             df['Flag'] = False
 
-        # Get predictions for all transactions
-        predictions = predict_categories(model, vectorizer, df['Name'].values, n=5)
+        # Get predictions and probabilities for all transactions
+        predictions, probabilities = predict_categories(model, vectorizer, df['Name'].values, n=5)
         
         # Initialize categories with top predictions
-        for idx, pred_categories in enumerate(predictions):
+        for idx, (pred_categories, _) in enumerate(zip(predictions, probabilities)):
             if not df.at[idx, 'Category'] and pred_categories:
                 df.at[idx, 'Category'] = pred_categories[0]
 
@@ -117,13 +117,25 @@ def main():
                     st.text(transaction)
                 
                 with col5:
-                    # Display predicted categories as buttons in a row
+                    # Display predicted categories as buttons in a row with probabilities
                     button_cols = st.columns(len(pred_categories))
                     button_clicked = False
                     clicked_category = None
-                    for button_col, category in zip(button_cols, pred_categories):
+                    current_category = st.session_state.categories.get(idx, '')
+                    
+                    for button_col, (category, prob) in zip(button_cols, zip(pred_categories, probabilities[idx])):
                         with button_col:
-                            if st.button(category, key=f"pred_{idx}_{category}"):
+                            is_selected = current_category == category
+                            button_style = f"""
+                                <style>
+                                    div[data-testid="stButton"] button {{
+                                        background-color: {'#e0e3e9' if is_selected else 'white'};
+                                        border-color: {'#c0c3c9' if is_selected else '#e0e3e9'};
+                                    }}
+                                </style>
+                            """
+                            st.markdown(button_style, unsafe_allow_html=True)
+                            if st.button(f"{category}\n{prob:.0%}", key=f"pred_{idx}_{category}"):
                                 button_clicked = True
                                 clicked_category = category
                 
