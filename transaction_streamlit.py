@@ -12,13 +12,13 @@ def main():
             background-color: #f0f2f6;
             padding: 10px;
             border-radius: 5px;
-            margin: 2px 0px;
+            border-bottom: 1px solid #444444;
         }
         .row-odd {
             background-color: white;
             padding: 10px;
             border-radius: 5px;
-            margin: 2px 0px;
+            border-bottom: 1px solid #444444;
         }
         </style>
     """, unsafe_allow_html=True)
