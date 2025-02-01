@@ -1,2 +1,2 @@
 # Path to training data
-DATA_PATH = "data/raw/transactions.csv"
+DATA_PATH = "/home/abuzarmahmood/projects/transcation_labeller/data/raw/transactions.csv"
