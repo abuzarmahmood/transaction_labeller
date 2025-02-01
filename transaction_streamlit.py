@@ -123,18 +123,14 @@ def main():
                     clicked_category = None
                     current_category = st.session_state.categories.get(idx, '')
                     
-                    for button_col, (category, prob) in zip(button_cols, zip(pred_categories, probabilities[idx])):
+                    # Only show buttons for predictions with >= 5% probability
+                    filtered_predictions = [(cat, prob) for cat, prob in zip(pred_categories, probabilities[idx]) if prob >= 0.05]
+                    if filtered_predictions:
+                        button_cols = st.columns(len(filtered_predictions))
+                    
+                    for button_col, (category, prob) in zip(button_cols, filtered_predictions):
                         with button_col:
                             is_selected = current_category == category
-                            # button_style = f"""
-                            #     <style>
-                            #         div[data-testid="stButton"] button {{
-                            #             background-color: {'#e0e3e9' if is_selected else 'white'};
-                            #             border-color: {'#c0c3c9' if is_selected else '#e0e3e9'};
-                            #         }}
-                            #     </style>
-                            # """
-                            # st.markdown(button_style, unsafe_allow_html=True)
                             if st.button(f"{category}\n{prob:.0%}", key=f"pred_{idx}_{category}"):
                                 button_clicked = True
                                 clicked_category = category
