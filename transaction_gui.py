@@ -17,6 +17,7 @@ class TransactionLabellerGUI:
         
         # Data storage
         self.transactions_df = None
+        self.category_dropdowns = {}  # Store references to category dropdowns
         
     def setup_gui(self):
         # Main container
@@ -114,12 +115,18 @@ class TransactionLabellerGUI:
                 category_dropdown['values'] = sorted(self.model.classes_)
                 category_dropdown.grid(row=idx, column=2, padx=5, pady=2, sticky=tk.W)
                 
+                # Store reference to dropdown
+                self.category_dropdowns[idx-1] = category_dropdown
+                
                 # Bind dropdown selection
                 category_dropdown.bind('<<ComboboxSelected>>',
                                     lambda e, row=idx-1, var=category_var: self.select_category(row, var.get()))
     
     def select_category(self, row_index, category):
         self.transactions_df.at[row_index, 'Category'] = category
+        # Update the dropdown to show the selected category
+        if row_index in self.category_dropdowns:
+            self.category_dropdowns[row_index].set(category)
     
     def save_results(self):
         if self.transactions_df is not None:
