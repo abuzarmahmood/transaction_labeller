@@ -57,7 +57,7 @@ def main():
         for idx, pred_categories in enumerate(predictions):
             if not df.at[idx, 'Category'] and pred_categories:
                 df.at[idx, 'Category'] = pred_categories[0]
-        
+
         # Create a container for the transactions
         transactions_container = st.container()
         
@@ -128,16 +128,27 @@ def main():
                     if idx not in st.session_state.categories:
                         current_category = df.at[idx, 'Category']
                         if not current_category:
-                            current_category = pred_categories[0] if pred_categories else all_categories[0]
+                            if pred_categories:
+                                current_category = pred_categories[0]
+                            else:
+                                current_category = None
+                            # current_category = pred_categories[0] if pred_categories else all_categories[0]
                         st.session_state.categories[idx] = current_category
                     
                     # Update category if button was clicked
                     if button_clicked:
                         st.session_state.categories[idx] = clicked_category
+                        current_category = st.session_state.categories[idx]
+                    else:
+                        current_category = pred_categories[0]
+                    if current_category not in all_categories: # If category is already selected, show it
+                        list_idx = 0
+                    else:
+                        list_idx = all_categories.index(current_category)
                     selected_category = st.selectbox(
                         "Select category",
                         all_categories,
-                        index=all_categories.index(st.session_state.categories[idx]) if st.session_state.categories[idx] in all_categories else 0,
+                        index=list_idx,
                         key=f"dropdown_{idx}"
                     )
                     st.session_state.categories[idx] = selected_category
