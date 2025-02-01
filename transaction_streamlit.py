@@ -42,11 +42,13 @@ def main():
                     st.text(transaction)
                 
                 with col2:
-                    # Display predicted categories as buttons
-                    for category in pred_categories:
-                        if st.button(category, key=f"pred_{idx}_{category}"):
-                            df.at[idx, 'Category'] = category
-                            st.experimental_rerun()
+                    # Display predicted categories as buttons in a row
+                    button_cols = st.columns(len(pred_categories))
+                    for button_col, category in zip(button_cols, pred_categories):
+                        with button_col:
+                            if st.button(category, key=f"pred_{idx}_{category}"):
+                                df.at[idx, 'Category'] = category
+                                st.experimental_rerun()
                 
                 with col3:
                     # Dropdown for manual category selection
