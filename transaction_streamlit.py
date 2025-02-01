@@ -25,6 +25,10 @@ def main():
     
     st.title("Transaction Labeller")
 
+    # Initialize session state for categories if not exists
+    if 'categories' not in st.session_state:
+        st.session_state.categories = {}
+
     # Load model and vectorizer
     @st.cache_resource
     def load_model():
@@ -115,21 +119,23 @@ def main():
                 with col6:
                     # Dropdown for manual category selection
                     all_categories = sorted(model.classes_)
-                    current_category = df.at[idx, 'Category']
+                    # Get category from session state or dataframe
+                    if idx not in st.session_state.categories:
+                        current_category = df.at[idx, 'Category']
+                        if not current_category:
+                            current_category = pred_categories[0] if pred_categories else all_categories[0]
+                        st.session_state.categories[idx] = current_category
                     
-                    # Update category if button was clicked or initialize with top prediction
+                    # Update category if button was clicked
                     if button_clicked:
-                        current_category = clicked_category
-                        df.at[idx, 'Category'] = current_category
-                    elif not current_category:
-                        current_category = pred_categories[0] if pred_categories else all_categories[0]
-                        df.at[idx, 'Category'] = current_category
+                        st.session_state.categories[idx] = clicked_category
                     selected_category = st.selectbox(
                         "Select category",
                         all_categories,
-                        index=all_categories.index(current_category) if current_category in all_categories else 0,
+                        index=all_categories.index(st.session_state.categories[idx]) if st.session_state.categories[idx] in all_categories else 0,
                         key=f"dropdown_{idx}"
                     )
+                    st.session_state.categories[idx] = selected_category
                     df.at[idx, 'Category'] = selected_category
                 st.markdown('</div>', unsafe_allow_html=True)
         
