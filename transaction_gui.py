@@ -2,34 +2,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog
 import pandas as pd
 import numpy as np
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.naive_bayes import MultinomialNB
-
-def load_model_and_vectorizer():
-    # Load and prepare data
-    raw_data_path = '/home/abuzarmahmood/projects/transcation_labeller/data/raw/transactions.csv'
-    raw_data = pd.read_csv(raw_data_path)
-    
-    categories = raw_data['Category'].unique()
-    y = raw_data['Category'].values
-    transactions = raw_data['Name'].values
-    
-    # Extract features
-    vectorizer = CountVectorizer()
-    vectorizer.fit(transactions)
-    X = vectorizer.transform(transactions)
-    
-    # Train model
-    model = MultinomialNB()
-    model.fit(X, y)
-    
-    return model, vectorizer
-
-def predict_categories(model, vectorizer, transactions, n=5):
-    X = vectorizer.transform(transactions)
-    proba = model.predict_proba(X)
-    top_n_indices = np.argsort(proba, axis=1)[:, -n:]
-    return [[model.classes_[idx] for idx in indices[::-1]] for indices in top_n_indices]
+from pred_transactions import load_model_and_vectorizer, predict_categories
 
 class TransactionLabellerGUI:
     def __init__(self, root):

@@ -7,8 +7,9 @@ import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
+from config import DATA_PATH
 
-raw_data_path = '/home/abuzarmahmood/projects/transcation_labeller/data/raw/transactions.csv'
+raw_data_path = DATA_PATH
 raw_data = pd.read_csv(raw_data_path)
 
 categories = raw_data['Category'].unique()
