@@ -53,3 +53,29 @@ def top_n_accuracy(model, X, y, n=5):
     return np.mean([y[i] in top_n[i] for i in range(len(y))])
 
 scores = cross_val_score(model, X, y, cv=5, scoring=top_n_accuracy)
+
+# Save model and vectorizer as global variables
+global_model = MultinomialNB()
+global_model.fit(X, y)
+global_vectorizer = vectorizer
+
+def load_model_and_vectorizer():
+    """Return the trained model and vectorizer"""
+    return global_model, global_vectorizer
+
+def predict_categories(transaction_text, n=3):
+    """
+    Predict top n categories for a transaction description
+    
+    Args:
+        transaction_text (str): Transaction description text
+        n (int): Number of top categories to return
+        
+    Returns:
+        list: Top n predicted categories
+    """
+    model, vectorizer = load_model_and_vectorizer()
+    X_new = vectorizer.transform([transaction_text])
+    proba = model.predict_proba(X_new)
+    top_n_idx = np.argsort(proba[0])[-n:][::-1]
+    return [model.classes_[i] for i in top_n_idx]
