@@ -10,12 +10,10 @@ def main():
         <style>
         .row-even {
             background-color: #f0f2f6;
-            padding: 10px;
             border-radius: 5px;
             border-bottom: 1px solid #444444;
         }
         .row-odd {
-            background-color: white;
             padding: 10px;
             border-radius: 5px;
             border-bottom: 1px solid #444444;
@@ -64,10 +62,12 @@ def main():
 
         # Create a container for the transactions
         transactions_container = st.container()
+
+        col_format = [0.5, 0.5, 1, 0.5, 2.5, 1, 0.5]
         
         with transactions_container:
             # Add column headers
-            header_col1, header_col2, header_col3, header_col4, header_col5, header_col6, header_col7 = st.columns([1, 1, 1, 2, 2, 2, 1])
+            header_col1, header_col2, header_col3, header_col4, header_col5, header_col6, header_col7 = st.columns(col_format)
             with header_col1:
                 if 'Date' in df.columns:
                     st.markdown("**Date**")
@@ -90,7 +90,7 @@ def main():
             for idx, (transaction, pred_categories) in enumerate(zip(df['Name'], predictions)):
                 row_class = "row-even" if idx % 2 == 0 else "row-odd"
                 st.markdown(f'<div class="{row_class}">', unsafe_allow_html=True)
-                col1, col2, col3, col4, col5, col6, col7 = st.columns([1, 1, 1, 2, 2, 2, 1])
+                col1, col2, col3, col4, col5, col6, col7 = st.columns(col_format)
                 
                 with col1:
                     # Display Date if present
