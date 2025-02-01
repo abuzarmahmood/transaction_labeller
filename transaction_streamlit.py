@@ -4,6 +4,25 @@ from pred_transactions import return_model_and_vectorizer, predict_categories
 
 def main():
     st.set_page_config(page_title="Transaction Labeller", layout="wide")
+    
+    # Add CSS for alternating row colors
+    st.markdown("""
+        <style>
+        .row-even {
+            background-color: #f0f2f6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 2px 0px;
+        }
+        .row-odd {
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 2px 0px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
     st.title("Transaction Labeller")
 
     # Load model and vectorizer
@@ -54,6 +73,8 @@ def main():
 
             # Display each transaction with its predictions
             for idx, (transaction, pred_categories) in enumerate(zip(df['Name'], predictions)):
+                row_class = "row-even" if idx % 2 == 0 else "row-odd"
+                st.markdown(f'<div class="{row_class}">', unsafe_allow_html=True)
                 col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 1, 2, 2, 2])
                 
                 with col1:
@@ -103,6 +124,7 @@ def main():
                         key=f"dropdown_{idx}"
                     )
                     df.at[idx, 'Category'] = selected_category
+                st.markdown('</div>', unsafe_allow_html=True)
         
         # Save button
         if st.button("Save Results"):
