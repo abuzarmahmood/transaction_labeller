@@ -159,7 +159,7 @@ def main():
                     )
                     st.session_state.categories[idx] = selected_category
                     df.at[idx, 'Category'] = selected_category
-                    df.at[idx, 'Flag'] = st.session_state.flags[idx]
+                
                 with col7:
                     # Checkbox for flagging transactions
                     if idx not in st.session_state.flags:
@@ -171,6 +171,7 @@ def main():
                         key=f"flag_{idx}"
                     )
                     st.session_state.flags[idx] = is_flagged
+                    df.at[idx, 'Flag'] = is_flagged
                     
                 st.markdown('</div>', unsafe_allow_html=True)
         
