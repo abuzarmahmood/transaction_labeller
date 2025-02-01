@@ -25,9 +25,11 @@ def main():
     
     st.title("Transaction Labeller")
 
-    # Initialize session state for categories if not exists
+    # Initialize session state for categories and flags if not exists
     if 'categories' not in st.session_state:
         st.session_state.categories = {}
+    if 'flags' not in st.session_state:
+        st.session_state.flags = {}
 
     # Load model and vectorizer
     @st.cache_resource
@@ -46,9 +48,11 @@ def main():
         else:
             df = pd.read_excel(uploaded_file)
         
-        # Add Category column if it doesn't exist
+        # Add Category and Flag columns if they don't exist
         if 'Category' not in df.columns:
             df['Category'] = ''
+        if 'Flag' not in df.columns:
+            df['Flag'] = False
 
         # Get predictions for all transactions
         predictions = predict_categories(model, vectorizer, df['Name'].values, n=5)
@@ -63,7 +67,7 @@ def main():
         
         with transactions_container:
             # Add column headers
-            header_col1, header_col2, header_col3, header_col4, header_col5, header_col6 = st.columns([1, 1, 1, 2, 2, 2])
+            header_col1, header_col2, header_col3, header_col4, header_col5, header_col6, header_col7 = st.columns([1, 1, 1, 2, 2, 2, 1])
             with header_col1:
                 if 'Date' in df.columns:
                     st.markdown("**Date**")
@@ -79,12 +83,14 @@ def main():
                 st.markdown("**Suggestions**")
             with header_col6:
                 st.markdown("**Category**")
+            with header_col7:
+                st.markdown("**Flag**")
 
             # Display each transaction with its predictions
             for idx, (transaction, pred_categories) in enumerate(zip(df['Name'], predictions)):
                 row_class = "row-even" if idx % 2 == 0 else "row-odd"
                 st.markdown(f'<div class="{row_class}">', unsafe_allow_html=True)
-                col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 1, 2, 2, 2])
+                col1, col2, col3, col4, col5, col6, col7 = st.columns([1, 1, 1, 2, 2, 2, 1])
                 
                 with col1:
                     # Display Date if present
@@ -153,6 +159,19 @@ def main():
                     )
                     st.session_state.categories[idx] = selected_category
                     df.at[idx, 'Category'] = selected_category
+                    df.at[idx, 'Flag'] = st.session_state.flags[idx]
+                with col7:
+                    # Checkbox for flagging transactions
+                    if idx not in st.session_state.flags:
+                        st.session_state.flags[idx] = False
+                    
+                    is_flagged = st.checkbox(
+                        "Flag",
+                        value=st.session_state.flags[idx],
+                        key=f"flag_{idx}"
+                    )
+                    st.session_state.flags[idx] = is_flagged
+                    
                 st.markdown('</div>', unsafe_allow_html=True)
         
         # Save button
