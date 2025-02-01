@@ -117,13 +117,13 @@ def main():
                     all_categories = sorted(model.classes_)
                     current_category = df.at[idx, 'Category']
                     
-                    # Update category if button was clicked
+                    # Update category if button was clicked or initialize with top prediction
                     if button_clicked:
                         current_category = clicked_category
                         df.at[idx, 'Category'] = current_category
-                    # If no category is set, use the most likely predicted category
-                    elif not current_category and pred_categories:
-                        current_category = pred_categories[0]
+                    elif not current_category:
+                        current_category = pred_categories[0] if pred_categories else all_categories[0]
+                        df.at[idx, 'Category'] = current_category
                     selected_category = st.selectbox(
                         "Select category",
                         all_categories,
