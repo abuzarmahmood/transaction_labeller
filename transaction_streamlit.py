@@ -36,9 +36,23 @@ def main():
         with transactions_container:
             # Display each transaction with its predictions
             for idx, (transaction, pred_categories) in enumerate(zip(df['Name'], predictions)):
-                col1, col2, col3 = st.columns([2, 2, 2])
+                col1, col2, col3, col4, col5 = st.columns([1, 1, 2, 2, 2])
                 
                 with col1:
+                    # Display Date if present
+                    if 'Date' in df.columns:
+                        st.text(str(df.at[idx, 'Date']))
+                    else:
+                        st.text("")
+
+                with col2:
+                    # Display Amount if present
+                    if 'Amount' in df.columns:
+                        st.text(f"${df.at[idx, 'Amount']:.2f}")
+                    else:
+                        st.text("")
+
+                with col3:
                     st.text(transaction)
                 
                 with col2:
