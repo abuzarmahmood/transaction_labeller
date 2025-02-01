@@ -104,18 +104,25 @@ def main():
                 with col5:
                     # Display predicted categories as buttons in a row
                     button_cols = st.columns(len(pred_categories))
+                    button_clicked = False
+                    clicked_category = None
                     for button_col, category in zip(button_cols, pred_categories):
                         with button_col:
                             if st.button(category, key=f"pred_{idx}_{category}"):
-                                df.at[idx, 'Category'] = category
-                                st.rerun()
+                                button_clicked = True
+                                clicked_category = category
                 
                 with col6:
                     # Dropdown for manual category selection
                     all_categories = sorted(model.classes_)
                     current_category = df.at[idx, 'Category']
+                    
+                    # Update category if button was clicked
+                    if button_clicked:
+                        current_category = clicked_category
+                        df.at[idx, 'Category'] = current_category
                     # If no category is set, use the most likely predicted category
-                    if not current_category and pred_categories:
+                    elif not current_category and pred_categories:
                         current_category = pred_categories[0]
                     selected_category = st.selectbox(
                         "Select category",
