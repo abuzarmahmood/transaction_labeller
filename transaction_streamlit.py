@@ -36,7 +36,7 @@ def main():
         with transactions_container:
             # Display each transaction with its predictions
             for idx, (transaction, pred_categories) in enumerate(zip(df['Name'], predictions)):
-                col1, col2, col3, col4, col5 = st.columns([1, 1, 2, 2, 2])
+                col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 1, 2, 2, 2])
                 
                 with col1:
                     # Display Date if present
@@ -53,9 +53,16 @@ def main():
                         st.text("")
 
                 with col3:
+                    # Display Account if present
+                    if 'Account' in df.columns:
+                        st.text(str(df.at[idx, 'Account']))
+                    else:
+                        st.text("")
+
+                with col4:
                     st.text(transaction)
                 
-                with col4:
+                with col5:
                     # Display predicted categories as buttons in a row
                     button_cols = st.columns(len(pred_categories))
                     for button_col, category in zip(button_cols, pred_categories):
@@ -64,7 +71,7 @@ def main():
                                 df.at[idx, 'Category'] = category
                                 st.experimental_rerun()
                 
-                with col5:
+                with col6:
                     # Dropdown for manual category selection
                     all_categories = sorted(model.classes_)
                     current_category = df.at[idx, 'Category']
