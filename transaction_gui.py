@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog
 import pandas as pd
 import numpy as np
-from pred_transactions import load_model_and_vectorizer, predict_categories
+from pred_transactions import return_model_and_vectorizer, predict_categories
 
 class TransactionLabellerGUI:
     def __init__(self, root):
@@ -10,7 +10,7 @@ class TransactionLabellerGUI:
         self.root.title("Transaction Labeller")
         
         # Load model and vectorizer
-        self.model, self.vectorizer = load_model_and_vectorizer()
+        self.model, self.vectorizer = return_model_and_vectorizer()
         
         # Setup GUI components
         self.setup_gui()
