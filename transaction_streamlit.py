@@ -54,6 +54,9 @@ def main():
                     # Dropdown for manual category selection
                     all_categories = sorted(model.classes_)
                     current_category = df.at[idx, 'Category']
+                    # If no category is set, use the most likely predicted category
+                    if not current_category and pred_categories:
+                        current_category = pred_categories[0]
                     selected_category = st.selectbox(
                         "Select category",
                         all_categories,
