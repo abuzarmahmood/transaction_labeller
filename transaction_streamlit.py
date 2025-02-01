@@ -55,7 +55,7 @@ def main():
                 with col3:
                     st.text(transaction)
                 
-                with col2:
+                with col4:
                     # Display predicted categories as buttons in a row
                     button_cols = st.columns(len(pred_categories))
                     for button_col, category in zip(button_cols, pred_categories):
@@ -64,7 +64,7 @@ def main():
                                 df.at[idx, 'Category'] = category
                                 st.experimental_rerun()
                 
-                with col3:
+                with col5:
                     # Dropdown for manual category selection
                     all_categories = sorted(model.classes_)
                     current_category = df.at[idx, 'Category']
