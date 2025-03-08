@@ -1,0 +1,11 @@
+Date,Amount,Account,Name,Category,Flag
+2024-01-30,125.63,Checking,WALMART SUPERCENTER,Groceries,False
+2024-01-29,45.99,Credit Card,NETFLIX.COM,Entertainment,False
+2024-01-29,2.99,Credit Card,SPOTIFY USA,Entertainment,False
+2024-01-28,42.50,Credit Card,SHELL OIL,Transportation,False
+2024-01-28,12.75,Checking,STARBUCKS COFFEE,Dining,False
+2024-01-27,1250.00,Checking,RENT PAYMENT,Housing,False
+2024-01-27,89.99,Credit Card,AMAZON.COM,Shopping,False
+2024-01-26,65.32,Checking,TRADER JOE'S,Groceries,False
+2024-01-26,150.00,Credit Card,ELECTRIC COMPANY,Utilities,False
+2024-01-25,22.50,Checking,CHIPOTLE MEXICAN GRILL,Dining,False
